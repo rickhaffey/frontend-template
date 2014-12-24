@@ -51,13 +51,25 @@ module.exports = function(grunt) {
 
 
 	// define a task to perform initial setup, creating directory structure, etc...
-	grunt.registerTask("install", "sets up the initial directory structure", function() {
-        grunt.log.writeln("creating 'js' directory...");						   
-        grunt.file.mkdir("js");
-        grunt.log.writeln("creating 'less' directory...");						   
-        grunt.file.mkdir("less");
-        grunt.log.writeln("creating 'test' directory...");						   
-        grunt.file.mkdir("test");
+	grunt.registerTask("install", "sets up the initial directory structure", function(packageName) {
+        if(!packageName) {
+            grunt.log.warn("Package name must be specified.  As an example: 'grunt install:Awesome_Package'");
+		} else {
+			// update the pkg config value
+			var pkg = grunt.config.get("pkg");
+			pkg.name = packageName;
+
+			// write it back out to package.json
+			grunt.log.writeln("updating package.json...");
+			grunt.file.write("package.json", JSON.stringify(pkg, null, 2));
+			
+			grunt.log.writeln("creating 'js' directory...");						   
+			grunt.file.mkdir("js");
+			grunt.log.writeln("creating 'less' directory...");						   
+			grunt.file.mkdir("less");
+			grunt.log.writeln("creating 'test' directory...");						   
+			grunt.file.mkdir("test");
+		}
     });
 
 	//grunt.registerTask("test", function() {

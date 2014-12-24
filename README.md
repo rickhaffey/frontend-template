@@ -16,8 +16,8 @@ npm install
 bower install
 ~~~
 
-3. Setup initial directory structure
+3. Update package name, and set up initial directory structure 
 
 ~~~
-grunt install	
+grunt install:{package name}
 ~~~
