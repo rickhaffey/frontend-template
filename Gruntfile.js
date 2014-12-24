@@ -50,14 +50,26 @@ module.exports = function(grunt) {
     grunt.initConfig(config);
 
 
-	// define a task to perform initial setup, creating directory structure, etc...
-	grunt.registerTask("install", "sets up the initial directory structure", function(packageName) {
+	// define a task to perform initial setup
+	// this will:
+	// i) remove the .git folder
+	// ii) update package.json with the correct package name, and optional description
+	// iii) create a base directory structure
+	grunt.registerTask("install", "sets up the initial directory structure", function(packageName, packageDescription) {
         if(!packageName) {
             grunt.log.warn("Package name must be specified.  As an example: 'grunt install:Awesome_Package'");
 		} else {
-			// update the pkg config value
+			// dis-associate the template from the template's git repository
+			grunt.log.writeln("removing .git folder...");
+			grunt.file.delete(".git");
+
+			// update the pkg config values (name & description)
 			var pkg = grunt.config.get("pkg");
 			pkg.name = packageName;
+
+			if(packageDescription) {
+				pkg.description = packageDescription;
+			}
 
 			// write it back out to package.json
 			grunt.log.writeln("updating package.json...");
@@ -71,10 +83,6 @@ module.exports = function(grunt) {
 			grunt.file.mkdir("test");
 		}
     });
-
-	//grunt.registerTask("test", function() {
-    //    grunt.log.writeln("log from test...");
-    //});
 
 	grunt.loadNpmTasks("grunt-contrib-clean");
 	grunt.loadNpmTasks("grunt-contrib-concat");
